@@ -1,1 +1,44 @@
-<p>sales works!</p>
+
+<form>
+	<div class="mb-3 row">
+		<label for="table-filtering-search" class="col-xs-3 col-sm-auto col-form-label">Search:</label>
+		<div class="col-xs-3 col-sm-auto">
+			<input id="table-filtering-search" class="form-control" type="text" [formControl]="search" />
+		</div>
+	</div>
+</form>
+
+<table class="table table-striped">
+	<thead>
+		<tr>
+            
+            <th *ngFor="let col of sales.column" 
+            scope="col" 
+            [attr.colspan]="getColSpan(col)" 
+            [attr.rowspan]="getRowSpan(col)">
+            <app-sortable-header *ngIf="allowSort(col)" [sortKey]="col.field" 
+            (sortChange)="onSortChange($event)"/>
+            {{col.header}}
+        </th>
+		</tr>
+
+        <tr>
+            <th *ngFor="let col of getSubHeaders()">
+                <app-sortable-header *ngIf="allowSort(col)" [sortKey]="col.field" 
+                (sortChange)="onSortChange($event)"/>
+                {{col.header}}
+            </th>
+		</tr>
+	</thead>
+    <tbody>
+		<tr *ngFor="let data of sales.data">
+			<td>{{data.productID}}</td>
+			<td>{{data.productName}}</td>
+            <td>{{data.salesQ1}}</td>
+            <td>{{data.salesQ2}}</td>
+            <td>{{data.salesQ3}}</td>
+            <td>{{data.salesQ4}}</td>
+            <td>{{getTotalSum(data)}}</td>
+		</tr>
+    </tbody>
+</table>

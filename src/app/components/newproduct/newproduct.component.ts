@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { AlertInteractionService } from '../../services/alert-interaction.service';
+import { LoginService } from '../../services/login.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-newproduct',
@@ -16,7 +18,9 @@ export class NewProductComponent implements OnInit {
   inputProductStartDate: FormControl<Date | null> = new FormControl<Date | null>(null, [Validators.required]);
 
   constructor(
-    private alertInteraction: AlertInteractionService) {
+    private alertInteraction: AlertInteractionService,
+    private loginService: LoginService,
+    private router: Router) {
   }
 
   ngOnInit(): void {
@@ -27,6 +31,11 @@ export class NewProductComponent implements OnInit {
         inputProductManager: this.inputProductManager,
         inputProductStartDate: this.inputProductStartDate
       });
+
+    if (!this.loginService.isUserAuthenticated()) {
+      this.router.navigate(['/login']);
+      return;
+    }
   }
 
   private isFieldValid(field: FormControl<any>) {

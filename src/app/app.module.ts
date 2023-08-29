@@ -13,6 +13,8 @@ import { NgbPaginationModule, NgbAlertModule } from '@ng-bootstrap/ng-bootstrap'
 import { FormsModule } from '@angular/forms';
 import { ReactiveFormsModule } from '@angular/forms';
 import { AlertComponent } from './components/alert/alert.component';
+import { HttpClientModule } from "@angular/common/http";
+import { SortableHeaderComponent } from './components/sortable-header/sortable-header.component';
 
 @NgModule({
   declarations: [
@@ -22,7 +24,8 @@ import { AlertComponent } from './components/alert/alert.component';
     LoginComponent,
     SalesComponent,
     NewProductComponent,
-    AlertComponent
+    AlertComponent,
+    SortableHeaderComponent
   ],
   imports: [
     BrowserModule,
@@ -31,7 +34,8 @@ import { AlertComponent } from './components/alert/alert.component';
     NgbPaginationModule,
     NgbAlertModule,
     FormsModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    HttpClientModule
   ],
   providers: [],
   bootstrap: [AppComponent]

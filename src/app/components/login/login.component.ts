@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { AbstractControl, FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AlertInteractionService } from '../../services/alert-interaction.service';
+import { LoginService } from '../../services/login.service';
 
 @Component({
   selector: 'app-login',
@@ -16,7 +17,8 @@ export class LoginComponent implements OnInit {
 
   constructor(
     private router: Router,
-    private alertInteraction: AlertInteractionService) {
+    private alertInteraction: AlertInteractionService,
+    private loginService: LoginService) {
   }
 
   ngOnInit(): void {
@@ -32,6 +34,7 @@ export class LoginComponent implements OnInit {
     const password = "admin";
     this.alertInteraction.clearAlerts();
     if (this.inputEmail.value === email && this.inputPassword.value === password) {
+      this.loginService.login();
       this.router.navigate(['/sales']);
     } else {
       this.alertInteraction.setError("Credentials not valid, please try again.");
@@ -48,6 +51,6 @@ export class LoginComponent implements OnInit {
   }
 
   disableLogin(): boolean {
-    return this.isEmailInvalid() || this.isPasswordInvalid() || !this.inputPassword.dirty || !this.inputEmail.dirty;
+    return this.form.invalid;
   }
 }
