@@ -1,1 +1,51 @@
-<p>newproduct works!</p>
+<div class="card">
+    <div class="card-body">
+        <form [formGroup]="form" (ngSubmit)="addProduct()">
+            <div class="row mb-3">
+                <label for="inputProductName" class="col-sm-2 col-form-label">Name</label>
+                <div class="col-sm-10">
+                    <input type="text" id="inputProductName" formControlName="inputProductName"
+                        [ngClass]="isNameInvalid() ? 'form-control is-invalid': 'form-control'">
+                    <div *ngIf="isNameInvalid()" class="invalid-feedback ">
+                        Please provide a valid name.
+                    </div>
+                </div>
+            </div>
+            <div class="row mb-3">
+                <label for="inputProductId" class="col-sm-2 col-form-label">Id</label>
+                <div class="col-sm-10">
+                    <input type="number" id="inputProductId" formControlName="inputProductId"
+                        [ngClass]="isIdInvalid() ? 'form-control is-invalid': 'form-control'">
+                    <div *ngIf="isIdInvalid()" class="invalid-feedback ">
+                        Please provide a valid id.
+                    </div>
+                </div>
+            </div>
+
+            <div class="row mb-3">
+                <label for="inputProductManager" class="col-sm-2 col-form-label">Manager</label>
+                <div class="col-sm-10">
+                    <input type="text" id="inputProductId" formControlName="inputProductManager"
+                        [ngClass]="isManagerInvalid() ? 'form-control is-invalid': 'form-control'">
+                    <div *ngIf="isManagerInvalid()" class="invalid-feedback ">
+                        Please provide a valid manager name.
+                    </div>
+                </div>
+            </div>
+
+            <div class="row mb-3">
+                <label for="inputProductStartDate" class="col-sm-2 col-form-label">Sales start date</label>
+                <div class="col-sm-10">
+                    <input type="date" id="inputProductStartDate" formControlName="inputProductStartDate"
+                        [ngClass]="isSalesDateInvalid() ? 'form-control is-invalid': 'form-control'">
+                    <div *ngIf="isSalesDateInvalid()" class="invalid-feedback ">
+                        Please provide a valid date.
+                    </div>
+                </div>
+            </div>
+
+            <button type="submit" class="btn btn-primary" [disabled]="disableAddButton()">Add</button>
+            <button type="button" class="btn" (click)="clear()">Clear</button>
+        </form>
+    </div>
+</div>

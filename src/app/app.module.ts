@@ -7,11 +7,12 @@ import { HeaderComponent } from './components/header/header.component';
 import { ContentComponent } from './components/content/content.component';
 import { LoginComponent } from './components/login/login.component';
 import { SalesComponent } from './components/sales/sales.component';
-import { NewproductComponent } from './components/newproduct/newproduct.component';
+import { NewProductComponent } from './components/newproduct/newproduct.component';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { NgbPaginationModule, NgbAlertModule } from '@ng-bootstrap/ng-bootstrap';
 import { FormsModule } from '@angular/forms';
 import { ReactiveFormsModule } from '@angular/forms';
+import { AlertComponent } from './components/alert/alert.component';
 
 @NgModule({
   declarations: [
@@ -20,7 +21,8 @@ import { ReactiveFormsModule } from '@angular/forms';
     ContentComponent,
     LoginComponent,
     SalesComponent,
-    NewproductComponent
+    NewProductComponent,
+    AlertComponent
   ],
   imports: [
     BrowserModule,

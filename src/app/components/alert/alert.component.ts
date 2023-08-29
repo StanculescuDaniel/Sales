@@ -8,6 +8,7 @@ import { AlertInteractionService } from '../../services/alert-interaction.servic
 })
 export class AlertComponent implements OnInit{
   error: string | null = null;
+  success: string | null = null;
   
   constructor(private alertInteraction: AlertInteractionService){
 
@@ -16,6 +17,10 @@ export class AlertComponent implements OnInit{
   ngOnInit(): void {
     this.alertInteraction.onError$.subscribe(error => {
       this.error = error;
+    });
+
+    this.alertInteraction.onSuccess$.subscribe(message => {
+      this.success = message;
     });
   }
 }
