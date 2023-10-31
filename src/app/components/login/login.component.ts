@@ -3,6 +3,12 @@ import { AbstractControl, FormControl, FormGroup, Validators } from '@angular/fo
 import { Router } from '@angular/router';
 import { AlertInteractionService } from '../../services/alert-interaction.service';
 import { LoginService } from '../../services/login.service';
+import { Store, select } from '@ngrx/store';
+import { loginActions } from 'src/app/state/login/login.actions';
+import { LoginRequest } from 'src/app/interfaces/login';
+import { AppState, LoginState } from 'src/app/interfaces/state';
+import { isLoggedInSelector } from 'src/app/state/login/login.selectors';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-login',
@@ -12,11 +18,14 @@ import { LoginService } from '../../services/login.service';
 export class LoginComponent implements OnInit {
 
   form!: FormGroup;
-  inputEmail: FormControl = new FormControl("", [Validators.required, Validators.email]);
-  inputPassword: FormControl = new FormControl("", [Validators.required]);
+  inputEmail: FormControl = new FormControl("dan@gmail.com", [Validators.required, Validators.email]);
+  inputPassword: FormControl = new FormControl("123", [Validators.required]);
+
+  isLoggedIn$: Observable<boolean> = this.store.pipe(select(isLoggedInSelector));
 
   constructor(
     private router: Router,
+    private store: Store<AppState>,
     private alertInteraction: AlertInteractionService,
     private loginService: LoginService) {
   }
@@ -30,7 +39,16 @@ export class LoginComponent implements OnInit {
   }
 
   login() {
-    const email = "admin@gmail.com";
+    const request: LoginRequest = {
+      email: this.inputEmail.value,
+      password: this.inputPassword.value
+    }
+    this.store.dispatch(loginActions.login(request));
+
+
+    
+
+    /*const email = "admin@gmail.com";
     const password = "admin";
     this.alertInteraction.clearAlerts();
     if (this.inputEmail.value === email && this.inputPassword.value === password) {
@@ -39,7 +57,7 @@ export class LoginComponent implements OnInit {
     } else {
       this.alertInteraction.setError("Credentials not valid, please try again.");
       this.form.reset();
-    }
+    } */
   }
 
   isEmailInvalid(): boolean {

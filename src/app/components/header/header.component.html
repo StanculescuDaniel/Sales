@@ -1,4 +1,4 @@
-<ul ngbNav class="nav-tabs mb-5" *ngIf="displayHeader()">
+<ul ngbNav class="nav-tabs mb-5" *ngIf="displayHeader() | async">
     <li ngbNavItem>
         <a ngbNavLink routerLink="sales">Sales</a>
     </li>

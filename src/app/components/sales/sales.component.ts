@@ -5,6 +5,11 @@ import { Data, Router } from '@angular/router';
 import { FormControl } from '@angular/forms';
 import { SortEvent } from '../../interfaces/sortevent';
 import { LoginService } from '../../services/login.service';
+import { Store, select } from '@ngrx/store';
+import { AppState, SalesEntityData } from 'src/app/interfaces/state';
+import { salesActions } from 'src/app/state/sales/sales.actions';
+import { salesColumnsSelector, salesDataSelector } from 'src/app/state/sales/sales.selectors';
+import { Observable, zip } from 'rxjs';
 
 @Component({
   selector: 'app-sales',
@@ -20,18 +25,22 @@ export class SalesComponent implements OnInit {
   constructor(
     private salesService: SalesService,
     private loginService: LoginService,
-    private router: Router) {
+    private router: Router,
+    private store: Store<AppState>) {
 
   }
 
   ngOnInit(): void {
+    
+    this.store.dispatch(salesActions.getSales());
+    const salesData = this.store.pipe(select(salesDataSelector));
+    const salesColumns = this.store.pipe(select(salesColumnsSelector))
 
-    if(!this.loginService.isUserAuthenticated()) {
-      this.router.navigate(['/login']);
-      return;
-    }
-
-    this.salesService.getSales().subscribe((sales) => {
+    zip(salesData, salesColumns).subscribe(salesArr => {
+      const sales: Sales = {
+        column: salesArr[1],
+        data: salesArr[0]
+      }
       this.initialSales = Object.assign({}, sales);
       this.sales = Object.assign({}, sales);
     });

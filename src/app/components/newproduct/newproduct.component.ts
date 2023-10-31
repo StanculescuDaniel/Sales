@@ -31,11 +31,6 @@ export class NewProductComponent implements OnInit {
         inputProductManager: this.inputProductManager,
         inputProductStartDate: this.inputProductStartDate
       });
-
-    if (!this.loginService.isUserAuthenticated()) {
-      this.router.navigate(['/login']);
-      return;
-    }
   }
 
   private isFieldValid(field: FormControl<any>) {

@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { LoginService } from '../../services/login.service';
 import { Router } from '@angular/router';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-header',
@@ -20,7 +21,7 @@ export class HeaderComponent implements OnInit {
     
   }
 
-  displayHeader(): boolean {
+  displayHeader(): Observable<boolean> {
     return this.loginService.isUserAuthenticated();
   }
 }

@@ -1,4 +1,4 @@
-import { NgModule } from '@angular/core';
+import { NgModule, isDevMode } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 
 import { AppRoutingModule } from './app-routing.module';
@@ -15,6 +15,15 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { AlertComponent } from './components/alert/alert.component';
 import { HttpClientModule } from "@angular/common/http";
 import { SortableHeaderComponent } from './components/sortable-header/sortable-header.component';
+import { StoreModule } from '@ngrx/store';
+import { counterReducer } from './state/counter/counter.reducer';
+import { CounterComponent } from './components/counter/counter.component';
+import { loginReducer } from './state/login/login.reducer';
+import { StoreDevtoolsModule } from '@ngrx/store-devtools';
+import { EffectsModule } from '@ngrx/effects';
+import { LoginEffects } from './state/login/login.effects';
+import { salesReducer } from './state/sales/sales.reducer';
+import { SalesEffects } from './state/sales/sales.effects';
 
 @NgModule({
   declarations: [
@@ -25,7 +34,8 @@ import { SortableHeaderComponent } from './components/sortable-header/sortable-h
     SalesComponent,
     NewProductComponent,
     AlertComponent,
-    SortableHeaderComponent
+    SortableHeaderComponent,
+    CounterComponent
   ],
   imports: [
     BrowserModule,
@@ -35,7 +45,10 @@ import { SortableHeaderComponent } from './components/sortable-header/sortable-h
     NgbAlertModule,
     FormsModule,
     ReactiveFormsModule,
-    HttpClientModule
+    HttpClientModule,
+    StoreModule.forRoot({count: counterReducer, login: loginReducer, sales: salesReducer}),
+    StoreDevtoolsModule.instrument({ maxAge: 25, logOnly: !isDevMode() }),
+    EffectsModule.forRoot([LoginEffects, SalesEffects])
   ],
   providers: [],
   bootstrap: [AppComponent]
