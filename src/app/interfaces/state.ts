@@ -15,7 +15,8 @@ export interface LoginState {
 
 export interface SalesState {
     columns: SalesEntityColumn,
-    data: SalesEntityData
+    data: SalesEntityData,
+    loaded: boolean
 }
 
 export interface SalesEntityColumn extends EntityState<Column> {

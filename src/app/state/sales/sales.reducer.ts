@@ -15,10 +15,10 @@ const salesDataAdapter = createEntityAdapter<Data>({
 export const selectAllSalesData = salesDataAdapter.getSelectors().selectAll;
 export const selectAllColumnsData = salesColumnsAdapter.getSelectors().selectAll;
 
-
 const intialState: SalesState = {
     columns: salesColumnsAdapter.getInitialState(),
-    data: salesDataAdapter.getInitialState()
+    data: salesDataAdapter.getInitialState(),
+    loaded: false
 }
 
 export const salesReducer = createReducer<SalesState>(intialState,
@@ -27,6 +27,7 @@ export const salesReducer = createReducer<SalesState>(intialState,
         const data = salesDataAdapter.addMany(action.data, state.data);
         return {
             ...state,
+            loaded: true,
             columns,
             data
         };

@@ -13,7 +13,7 @@ import { NgbPaginationModule, NgbAlertModule } from '@ng-bootstrap/ng-bootstrap'
 import { FormsModule } from '@angular/forms';
 import { ReactiveFormsModule } from '@angular/forms';
 import { AlertComponent } from './components/alert/alert.component';
-import { HttpClientModule } from "@angular/common/http";
+import { HTTP_INTERCEPTORS, HttpClientModule } from "@angular/common/http";
 import { SortableHeaderComponent } from './components/sortable-header/sortable-header.component';
 import { StoreModule } from '@ngrx/store';
 import { counterReducer } from './state/counter/counter.reducer';
@@ -24,6 +24,7 @@ import { EffectsModule } from '@ngrx/effects';
 import { LoginEffects } from './state/login/login.effects';
 import { salesReducer } from './state/sales/sales.reducer';
 import { SalesEffects } from './state/sales/sales.effects';
+import { LoadingHttpInterceptor } from './services/loading-http-interceptor';
 
 @NgModule({
   declarations: [
@@ -46,11 +47,15 @@ import { SalesEffects } from './state/sales/sales.effects';
     FormsModule,
     ReactiveFormsModule,
     HttpClientModule,
-    StoreModule.forRoot({count: counterReducer, login: loginReducer, sales: salesReducer}),
+    StoreModule.forRoot({ count: counterReducer, login: loginReducer, sales: salesReducer }),
     StoreDevtoolsModule.instrument({ maxAge: 25, logOnly: !isDevMode() }),
     EffectsModule.forRoot([LoginEffects, SalesEffects])
   ],
-  providers: [],
+  providers: [
+    {
+      provide: HTTP_INTERCEPTORS, useClass: LoadingHttpInterceptor, multi: true
+    }
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

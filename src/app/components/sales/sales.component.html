@@ -13,7 +13,7 @@
 	<thead>
 		<tr>
             
-            <th *ngFor="let col of sales.column" 
+            <th *ngFor="let col of salesColumns$ | async" 
             scope="col" 
             [attr.colspan]="getColSpan(col)" 
             [attr.rowspan]="getRowSpan(col)">
@@ -24,7 +24,7 @@
 		</tr>
 
         <tr>
-            <th *ngFor="let col of getSubHeaders()">
+            <th *ngFor="let col of getSubHeaders() | async">
                 <app-sortable-header *ngIf="allowSort(col)" [sortKey]="col.field" 
                 (sortChange)="onSortChange($event)"/>
                 {{col.header}}
@@ -32,7 +32,7 @@
 		</tr>
 	</thead>
     <tbody>
-		<tr *ngFor="let data of sales.data">
+		<tr *ngFor="let data of salesData$ | async">
 			<td>{{data.productID}}</td>
 			<td>{{data.productName}}</td>
             <td>{{data.salesQ1}}</td>

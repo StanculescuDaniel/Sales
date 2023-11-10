@@ -6,9 +6,15 @@ export const selectSalesFeature = (state: AppState) => state.sales;
 
 
 export const salesDataSelector = createSelector(
-    selectSalesFeature, 
-    (state) => selectAllSalesData(state.data)); 
-    
+    selectSalesFeature,
+    (state) => selectAllSalesData(state.data));
+
+
 export const salesColumnsSelector = createSelector(
-    selectSalesFeature, 
+    selectSalesFeature,
     state => selectAllColumnsData(state.columns));
+
+export const areSalesLoadedSelector = createSelector(
+    selectSalesFeature,
+    state => state.loaded
+)

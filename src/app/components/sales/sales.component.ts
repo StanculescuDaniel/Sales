@@ -1,15 +1,13 @@
 import { Component, OnInit } from '@angular/core';
-import { SalesService } from '../../services/sales.service';
-import { Column, Sales, SubHeader } from '../../interfaces/sales';
-import { Data, Router } from '@angular/router';
+import { Column, SubHeader } from '../../interfaces/sales';
+import { Data } from '@angular/router';
 import { FormControl } from '@angular/forms';
 import { SortEvent } from '../../interfaces/sortevent';
-import { LoginService } from '../../services/login.service';
 import { Store, select } from '@ngrx/store';
-import { AppState, SalesEntityData } from 'src/app/interfaces/state';
-import { salesActions } from 'src/app/state/sales/sales.actions';
+import { AppState } from 'src/app/interfaces/state';
 import { salesColumnsSelector, salesDataSelector } from 'src/app/state/sales/sales.selectors';
-import { Observable, zip } from 'rxjs';
+import { Observable, combineLatest, BehaviorSubject } from 'rxjs';
+import { map, startWith } from "rxjs/operators";
 
 @Component({
   selector: 'app-sales',
@@ -19,37 +17,23 @@ import { Observable, zip } from 'rxjs';
 export class SalesComponent implements OnInit {
 
   search: FormControl = new FormControl("", []);
-  sales: Sales = { column: [], data: [] };
-  initialSales: Sales = { column: [], data: [] };
+  valueChanges$ = this.search.valueChanges.pipe(startWith(""));
+  sortChanges$ = new BehaviorSubject<SortEvent | null>(null);
+  salesData$ = combineLatest([this.valueChanges$, this.store.pipe(select(salesDataSelector)), this.sortChanges$])
+    .pipe(
+      map(([search, sales, sortEvent]) => {
+        return sales.filter(s => s.productName.indexOf(search) !== -1).sort((a,b) => this.salesSortFn(a,b, sortEvent));
+      })
+    );
+  salesColumns$ = this.store.pipe(select(salesColumnsSelector))
+
 
   constructor(
-    private salesService: SalesService,
-    private loginService: LoginService,
-    private router: Router,
     private store: Store<AppState>) {
-
   }
 
   ngOnInit(): void {
-    
-    this.store.dispatch(salesActions.getSales());
-    const salesData = this.store.pipe(select(salesDataSelector));
-    const salesColumns = this.store.pipe(select(salesColumnsSelector))
 
-    zip(salesData, salesColumns).subscribe(salesArr => {
-      const sales: Sales = {
-        column: salesArr[1],
-        data: salesArr[0]
-      }
-      this.initialSales = Object.assign({}, sales);
-      this.sales = Object.assign({}, sales);
-    });
-
-    this.search.valueChanges.subscribe(searchVal => {
-      this.sales.data = this.initialSales.data.filter(data => {
-        return data.productID.toLowerCase().indexOf(searchVal.toLowerCase()) !== -1 || data.productName.toLowerCase().indexOf(searchVal.toLowerCase()) !== -1;
-      });
-    });
   }
 
   getColSpan(col: Column) {
@@ -68,44 +52,53 @@ export class SalesComponent implements OnInit {
     return 1;
   }
 
-  allowSort(col: Column){
+  allowSort(col: Column) {
     return !col.subHeaders || col.subHeaders.length === 0;
   }
 
-  getSubHeaders(): SubHeader[] {
-    const colWithSubHeader: Column | undefined = this.sales.column.find(col => col.subHeaders && col.subHeaders.length > 0);
-    if (colWithSubHeader) {
-      return colWithSubHeader.subHeaders || [];
-    }
-    return [];
+  getSubHeaders(): Observable<SubHeader[]> {
+
+    return this.salesColumns$.pipe(
+      map(columns => {
+        const colWithSubHeader: Column | undefined = columns.find(col => col.subHeaders && col.subHeaders.length > 0);
+        if (colWithSubHeader) {
+          return colWithSubHeader.subHeaders || [];
+        }
+        return [];
+      }));
   }
 
   getTotalSum(data: Data): number {
     return data['salesQ1'] + data['salesQ2'] + data['salesQ3'] + data['salesQ4'];
   }
 
-  onSortChange(sortEvent: SortEvent) {
-    this.sales.data = this.sales.data.sort((a: Data, b: Data) => {
-      const nameA = a[sortEvent.sortKey];
-      const nameB = b[sortEvent.sortKey];
-
-      if (sortEvent.direction === "asc") {
-        if (nameA < nameB) {
-          return -1;
-        }
-        if (nameA > nameB) {
-          return 1;
-        }
-      } else {
-        if (nameA < nameB) {
-          return 1;
-        }
-        if (nameA > nameB) {
-          return -1;
-        }
-      }
+  salesSortFn(a: Data, b: Data, sortEvent: SortEvent | null): number {
+    if(sortEvent === null) {
       return 0;
-    });
+    }
+
+    const nameA = a[sortEvent.sortKey];
+    const nameB = b[sortEvent.sortKey];
+
+    if (sortEvent.direction === "asc") {
+      if (nameA < nameB) {
+        return -1;
+      }
+      if (nameA > nameB) {
+        return 1;
+      }
+    } else {
+      if (nameA < nameB) {
+        return 1;
+      }
+      if (nameA > nameB) {
+        return -1;
+      }
+    }
+    return 0;
   }
 
+  onSortChange(sortEvent: SortEvent) {
+    this.sortChanges$.next(sortEvent);
+  }
 }

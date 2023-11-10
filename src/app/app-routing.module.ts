@@ -5,11 +5,12 @@ import { SalesComponent } from './components/sales/sales.component';
 import { NewProductComponent } from './components/newproduct/newproduct.component';
 import { CounterComponent } from './components/counter/counter.component';
 import { canActivateRoute } from './services/auth-guard.service';
+import { salesResolver } from './services/sales-router-resolver.service';
 
 const routes: Routes = [
   {path: "", redirectTo: "login", pathMatch: "full"},
   {path: "login", component: LoginComponent},
-  {path: "sales", component: SalesComponent, canActivate: [canActivateRoute]},
+  {path: "sales", component: SalesComponent, canActivate: [canActivateRoute], resolve: {sales: salesResolver}},
   {path: "new", component: NewProductComponent, canActivate: [canActivateRoute]},
   {path: "counter", component: CounterComponent, canActivate: [canActivateRoute]}
 ];
