@@ -11,8 +11,10 @@ const routes: Routes = [
   {path: "", redirectTo: "login", pathMatch: "full"},
   {path: "login", component: LoginComponent},
   {path: "sales", component: SalesComponent, canActivate: [canActivateRoute], resolve: {sales: salesResolver}},
+  {path: "countries", canActivate: [canActivateRoute], loadChildren: () => import("./countries/countries.module").then(m => m.CountriesModule)},
   {path: "new", component: NewProductComponent, canActivate: [canActivateRoute]},
-  {path: "counter", component: CounterComponent, canActivate: [canActivateRoute]}
+  {path: "counter", component: CounterComponent, canActivate: [canActivateRoute]},
+  {path: "**", redirectTo: "login", pathMatch: "full"},
 ];
 
 @NgModule({

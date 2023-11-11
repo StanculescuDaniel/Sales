@@ -1,0 +1,22 @@
+<div>
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Common Name</th>
+                <th>Official Name</th>
+                <th>Region</th>
+                <th>Sub Region</th>
+                <th>Population</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let data of countries$ | async">
+                <td>{{data.name.common}}</td>
+                <td>{{data.name.official}}</td>
+                <td>{{data.region}}</td>
+                <td>{{data.subregion}}</td>
+                <td>{{data.population}}</td>
+            </tr>
+        </tbody>
+    </table>
+</div>

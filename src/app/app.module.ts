@@ -26,6 +26,8 @@ import { salesReducer } from './state/sales/sales.reducer';
 import { SalesEffects } from './state/sales/sales.effects';
 import { LoadingHttpInterceptor } from './services/loading-http-interceptor';
 import { LoadingComponent } from './components/loading/loading.component';
+import { EntityDataModule } from '@ngrx/data';
+import { entityConfig } from './entity-metadata';
 
 @NgModule({
   declarations: [
@@ -51,7 +53,8 @@ import { LoadingComponent } from './components/loading/loading.component';
     HttpClientModule,
     StoreModule.forRoot({ count: counterReducer, login: loginReducer, sales: salesReducer }),
     StoreDevtoolsModule.instrument({ maxAge: 25, logOnly: !isDevMode() }),
-    EffectsModule.forRoot([LoginEffects, SalesEffects])
+    EffectsModule.forRoot([LoginEffects, SalesEffects]),
+    EntityDataModule.forRoot(entityConfig)
   ],
   providers: [
     {
