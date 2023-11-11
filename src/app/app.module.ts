@@ -25,6 +25,7 @@ import { LoginEffects } from './state/login/login.effects';
 import { salesReducer } from './state/sales/sales.reducer';
 import { SalesEffects } from './state/sales/sales.effects';
 import { LoadingHttpInterceptor } from './services/loading-http-interceptor';
+import { LoadingComponent } from './components/loading/loading.component';
 
 @NgModule({
   declarations: [
@@ -36,7 +37,8 @@ import { LoadingHttpInterceptor } from './services/loading-http-interceptor';
     NewProductComponent,
     AlertComponent,
     SortableHeaderComponent,
-    CounterComponent
+    CounterComponent,
+    LoadingComponent
   ],
   imports: [
     BrowserModule,

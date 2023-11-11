@@ -3,6 +3,10 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { AlertInteractionService } from '../../services/alert-interaction.service';
 import { LoginService } from '../../services/login.service';
 import { Router } from '@angular/router';
+import { AppState } from 'src/app/interfaces/state';
+import { Store } from '@ngrx/store';
+import { salesActions } from 'src/app/state/sales/sales.actions';
+import { Data } from 'src/app/interfaces/sales';
 
 @Component({
   selector: 'app-newproduct',
@@ -19,6 +23,7 @@ export class NewProductComponent implements OnInit {
 
   constructor(
     private alertInteraction: AlertInteractionService,
+    private store: Store<AppState>,
     private loginService: LoginService,
     private router: Router) {
   }
@@ -58,6 +63,20 @@ export class NewProductComponent implements OnInit {
   }
 
   addProduct(): void {
+    const productID = this.inputProductId.value?.toString();
+    if(!productID) {
+      return;
+    }
+
+    const product: Data = {
+      productID: productID,
+      productName: this.inputProductName.value,
+      salesQ1: 0,
+      salesQ2: 0,
+      salesQ3: 0,
+      salesQ4: 0
+    };
+    this.store.dispatch(salesActions.add(product));
     this.alertInteraction.setSuccess(`Product "${this.inputProductName.value}" was added successfully.`);
     this.clear();
   }

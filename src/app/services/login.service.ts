@@ -1,8 +1,7 @@
-import { Injectable, inject } from '@angular/core';
+import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { LoginRequest, LoginResponse } from '../interfaces/login';
-import { Observable, tap } from 'rxjs';
-import { ActivatedRouteSnapshot, CanActivateFn, RouterStateSnapshot } from '@angular/router';
+import { Observable, delay } from 'rxjs';
 import { Store, select } from '@ngrx/store';
 import { isLoggedInSelector } from '../state/login/login.selectors';
 import { AppState } from '../interfaces/state';
@@ -16,7 +15,7 @@ export class LoginService {
   }
   authenticate(req: LoginRequest): Observable<LoginResponse> {
     if(req.email == "dan@gmail.com" && req.password == "123") {
-      return this.httpClient.get<LoginResponse>("../assets/login_response.json");
+      return this.httpClient.get<LoginResponse>("../assets/login_response.json").pipe(delay(2000));
     }
     return this.httpClient.get<LoginResponse>("../assets/login_response_error.json");
   }

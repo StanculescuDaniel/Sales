@@ -44,20 +44,6 @@ export class LoginComponent implements OnInit {
       password: this.inputPassword.value
     }
     this.store.dispatch(loginActions.login(request));
-
-
-    
-
-    /*const email = "admin@gmail.com";
-    const password = "admin";
-    this.alertInteraction.clearAlerts();
-    if (this.inputEmail.value === email && this.inputPassword.value === password) {
-      this.loginService.login();
-      this.router.navigate(['/sales']);
-    } else {
-      this.alertInteraction.setError("Credentials not valid, please try again.");
-      this.form.reset();
-    } */
   }
 
   isEmailInvalid(): boolean {

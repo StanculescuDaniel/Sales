@@ -2,21 +2,24 @@
 import { EntityState } from "@ngrx/entity";
 import { Column, Data } from "./sales";
 
-export interface AppState {
-    login: LoginState,
-    sales: SalesState
+export interface LoadingState {
+    loading: boolean
 }
 
-export interface LoginState {
+export interface AppState{
+    login: LoginState,
+    sales: SalesState,
+}
+
+export interface LoginState extends LoadingState {
     isLoggedIn: boolean,
     name: string
-    isLoading: boolean
 }
 
-export interface SalesState {
+export interface SalesState extends LoadingState {
     columns: SalesEntityColumn,
     data: SalesEntityData,
-    loaded: boolean
+    loaded: boolean,
 }
 
 export interface SalesEntityColumn extends EntityState<Column> {
